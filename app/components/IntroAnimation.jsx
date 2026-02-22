@@ -1,34 +1,19 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function IntroAnimation({ onComplete }) {
-    const [phase, setPhase] = useState("grid"); // grid → letters → expand → hero-reveal → done
-    const [animate, setAnimate] = useState(false);
-    const containerRef = useRef(null);
+    // Animation phases: init → grid → reveal → transition → complete
+    const [phase, setPhase] = useState("init");
 
     useEffect(() => {
-        // Phase 1: Grid fades in (handled by CSS), then start letter reveal
-        const t1 = setTimeout(() => {
-            setAnimate(true);
-            setPhase("letters");
-        }, 300);
-
-        // Phase 2: After letters are fully revealed, expand
-        const t2 = setTimeout(() => {
-            setPhase("expand");
-        }, 2600);
-
-        // Phase 3: After expand, trigger hero reveal
-        const t3 = setTimeout(() => {
-            setPhase("hero-reveal");
-        }, 3400);
-
-        // Phase 4: Animation done
+        const t1 = setTimeout(() => setPhase("grid"), 200);
+        const t2 = setTimeout(() => setPhase("reveal"), 1000);
+        const t3 = setTimeout(() => setPhase("transition"), 2800);
         const t4 = setTimeout(() => {
-            setPhase("done");
+            setPhase("complete");
             onComplete?.();
-        }, 4800);
+        }, 4300);
 
         return () => {
             clearTimeout(t1);
@@ -38,77 +23,96 @@ export default function IntroAnimation({ onComplete }) {
         };
     }, [onComplete]);
 
-    if (phase === "done") return null;
-
-    const text = "DESIGN BOX";
-    const letters = text.split("");
+    const cinematicEase = "cubic-bezier(0.76, 0, 0.24, 1)";
+    const isTransitioning = phase === "transition" || phase === "complete";
+    const isComplete = phase === "complete";
 
     return (
         <>
-            {/* Architectural grid overlay */}
+            {/* ===== BLACK OVERLAY (Wipes upward to reveal hero) ===== */}
             <div
-                className="grid-overlay"
-                style={
-                    phase === "hero-reveal"
-                        ? { animation: "gridFadeOut 0.8s var(--ease-smooth) forwards" }
-                        : {}
-                }
+                className="intro-black-overlay"
+                style={{
+                    transitionTimingFunction: cinematicEase,
+                    clipPath: isTransitioning
+                        ? "inset(0 0 100% 0)"
+                        : "inset(0 0 0 0)",
+                }}
             >
-                <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-                    {/* Vertical lines */}
-                    {Array.from({ length: 12 }, (_, i) => {
-                        const x = ((i + 1) / 13) * 100;
-                        return (
-                            <line
-                                key={`v-${i}`}
-                                className="grid-line"
-                                x1={`${x}%`}
-                                y1="0"
-                                x2={`${x}%`}
-                                y2="100%"
-                            />
-                        );
-                    })}
-                    {/* Horizontal lines */}
-                    {Array.from({ length: 8 }, (_, i) => {
-                        const y = ((i + 1) / 9) * 100;
-                        return (
-                            <line
-                                key={`h-${i}`}
-                                className="grid-line"
-                                x1="0"
-                                y1={`${y}%`}
-                                x2="100%"
-                                y2={`${y}%`}
-                            />
-                        );
-                    })}
-                </svg>
+                {/* Subtle Architectural Grid Lines */}
+                <div
+                    className={`intro-grid-line intro-grid-v1 ${phase !== "init" ? "animate" : ""}`}
+                    style={{ transitionTimingFunction: cinematicEase }}
+                />
+                <div
+                    className={`intro-grid-line intro-grid-v2 ${phase !== "init" ? "animate" : ""}`}
+                    style={{ transitionTimingFunction: cinematicEase }}
+                />
+                <div
+                    className={`intro-grid-line intro-grid-h1 ${phase !== "init" ? "animate" : ""}`}
+                    style={{ transitionTimingFunction: cinematicEase }}
+                />
             </div>
 
-            {/* Main intro panel */}
+            {/* ===== SUBTITLE (ARCHITECTURE + INTERIORS) ===== */}
             <div
-                ref={containerRef}
-                className={`intro-container ${phase === "hero-reveal" ? "phase-hero-reveal" : ""}`}
+                className="intro-subtitle-wrapper"
+                style={{
+                    transitionTimingFunction: cinematicEase,
+                    opacity:
+                        phase === "reveal"
+                            ? 1
+                            : 0,
+                    transform:
+                        phase === "reveal"
+                            ? "translate(-50%, 0)"
+                            : "translate(-50%, 8px)",
+                    pointerEvents: "none",
+                }}
             >
-                <div className={`wordmark-wrapper ${phase === "expand" ? "expand" : ""}`}>
-                    {/* Sweep line */}
-                    <div className={`mask-line ${animate ? "animate" : ""}`} />
-
-                    {/* Letters */}
-                    <div className="wordmark">
-                        {letters.map((letter, i) => (
-                            <span
-                                key={i}
-                                className={`wordmark-letter ${animate ? "animate" : ""}`}
-                                style={letter === " " ? { width: "0.4em" } : {}}
-                            >
-                                {letter === " " ? "\u00A0" : letter}
-                            </span>
-                        ))}
-                    </div>
-                </div>
+                <span className="intro-subtitle-text">
+                    ARCHITECTURE &nbsp;+&nbsp; INTERIORS
+                </span>
             </div>
+
+            {/* ===== LOGO TEXT (Transitions from center to header) ===== */}
+            <h1
+                className="intro-logo-text"
+                style={{
+                    transitionTimingFunction: cinematicEase,
+                    willChange: "top, left, transform, font-size, letter-spacing",
+
+                    // Position: center → header top-left
+                    ...(isTransitioning
+                        ? {
+                            top: "var(--header-row-center)",
+                            left: "clamp(1.5rem, 4vw, 3rem)",
+                            transform: "translate(0, -50%) scaleX(1)",
+                            fontSize: "clamp(0.85rem, 1.5vw, 1.1rem)",
+                            letterSpacing: "0.08em",
+                        }
+                        : {
+                            top: "50%",
+                            left: "50%",
+                            transform: `translate(-50%, -50%) scaleX(${phase === "init" || phase === "grid"
+                                    ? 1.08
+                                    : 1
+                                })`,
+                            fontSize: "clamp(2rem, 6vw, 5rem)",
+                            letterSpacing: "0.12em",
+                        }),
+
+                    // Clip-path reveal (left-to-right)
+                    clipPath:
+                        phase === "init" || phase === "grid"
+                            ? "inset(0 100% 0 0)"
+                            : "inset(0 0 0 0)",
+                }}
+            >
+                <span className="logo-part-design">design</span>
+                <span className="logo-part-boxx">boxx</span>
+                <span className="logo-part-studios">studios</span>
+            </h1>
         </>
     );
 }

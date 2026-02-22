@@ -8,6 +8,7 @@
 
 # next.js
 /.next/
+/.next_stale*/
 /out/
 /.npm-cache
 
@@ -32,3 +33,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# source PDFs & scripts
+*.pdf
+extract_images.py

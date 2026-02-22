@@ -15,10 +15,9 @@ export default function Header({ visible }) {
 
     return (
         <header className={`site-header ${visible ? "visible" : ""} ${scrolled ? "scrolled" : ""}`}>
-            <a href="/" className="header-logo">
-                Design Box
-            </a>
-            <nav>
+            {/* Logo space — the IntroAnimation text flies into this area */}
+            <div className="header-logo-placeholder" />
+            <nav className="header-nav-desktop">
                 <ul className="header-nav">
                     <li><a href="#projects">Projects</a></li>
                     <li><a href="#studio">Studio</a></li>

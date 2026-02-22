@@ -4,6 +4,35 @@ import { useState, useCallback } from "react";
 import IntroAnimation from "./components/IntroAnimation";
 import HeroSection from "./components/HeroSection";
 import Header from "./components/Header";
+import MobileMenu from "./components/MobileMenu";
+import ProjectCard from "./components/ProjectCard";
+import ScrollReveal from "./components/ScrollReveal";
+import ParallaxImage from "./components/ParallaxImage";
+import Footer from "./components/Footer";
+
+const PROJECTS = [
+    {
+        id: 1,
+        title: "Ayyana Mane",
+        category: "Residential Architecture",
+        year: "2024",
+        image: "/projects/AYYANA_MANE_pg2_img1.jpeg"
+    },
+    {
+        id: 2,
+        title: "Hariprasad Residence",
+        category: "Interiors",
+        year: "2024",
+        image: "/projects/Hariprasad_-_Interiors_pg3_img2.jpeg"
+    },
+    {
+        id: 3,
+        title: "Spurthi & Jayanth House",
+        category: "Architecture & Interiors",
+        year: "2025",
+        image: "/projects/Spurthi_&_Jayanth_House(1st_Proposal)_pg3_img1.jpeg"
+    }
+];
 
 export default function Home() {
     const [animationDone, setAnimationDone] = useState(false);
@@ -15,46 +44,92 @@ export default function Home() {
 
     return (
         <>
-            {/* Intro Animation Overlay */}
-            {!animationDone && (
-                <IntroAnimation onComplete={handleAnimationComplete} />
-            )}
+            {/* Intro Animation — persists as the logo after animation */}
+            <IntroAnimation onComplete={handleAnimationComplete} />
 
-            {/* Header */}
+            {/* Header (nav only, logo is the animated text) */}
             <Header visible={animationDone} />
+
+            {/* Mobile hamburger menu */}
+            <MobileMenu visible={animationDone} />
 
             {/* Hero Section */}
             <HeroSection visible={animationDone} />
 
-            {/* Additional content sections for scrolling context */}
-            <section className="content-section" id="projects">
-                <h2>Selected Projects</h2>
-                <p>
-                    Each space we design is a dialogue between form and function — where
-                    every material, angle, and light source is considered with
-                    architectural intent.
-                </p>
+            {/* SELECTED PROJECTS */}
+            <section className="content-section content-section--platinum" id="projects">
+                <ScrollReveal>
+                    <h2>Selected Projects</h2>
+                    <p>
+                        Each space we design is a dialogue between form and function — where
+                        every material, angle, and light source is considered with
+                        architectural intent.
+                    </p>
+                </ScrollReveal>
+
+                <div className="projects-grid">
+                    {PROJECTS.map((project, idx) => (
+                        <ScrollReveal key={project.id} delay={idx * 0.1}>
+                            <ProjectCard
+                                title={project.title}
+                                category={project.category}
+                                year={project.year}
+                                imageSrc={project.image}
+                            />
+                        </ScrollReveal>
+                    ))}
+                </div>
             </section>
 
-            <section
-                className="content-section"
-                id="studio"
-                style={{ background: "#000", color: "#fff" }}
-            >
-                <h2>Our Studio</h2>
-                <p style={{ color: "rgba(255,255,255,0.7)" }}>
-                    Founded on the belief that great design is invisible, Design Box
-                    creates environments that feel both inevitable and extraordinary.
-                </p>
+            {/* PARALLAX INTERSTITIAL */}
+            <ParallaxImage
+                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop"
+                alt="Studio Interior detail"
+                height="60vh"
+            />
+
+            {/* OUR STUDIO */}
+            <section className="content-section content-section--dark" id="studio">
+                <ScrollReveal>
+                    <h2>Our Studio</h2>
+                    <p style={{ marginBottom: "2rem" }}>
+                        Founded on the belief that great design is invisible, Design Boxx
+                        Studios creates environments that feel both inevitable and extraordinary.
+                        We blur the lines between architecture, interior design, and bespoke
+                        object creation.
+                    </p>
+                    <p style={{ opacity: 0.8, fontSize: "0.95rem" }}>
+                        <span style={{ color: "var(--gold)" }}>Founders:</span> Ar. Akash kalbagilmath &amp; Ar. Hazarath Bilal
+                    </p>
+                </ScrollReveal>
+
+                <ul className="approach-list">
+                    <ScrollReveal delay={0.1} yOffset={20}>
+                        <li className="approach-item">
+                            <span className="approach-number">01</span>
+                            <h3 className="approach-title">Architecture</h3>
+                            <p className="approach-desc">Translating concepts into rigorous, functional layouts where light, volume, and flow work in perfect harmony to create iconic structures.</p>
+                        </li>
+                    </ScrollReveal>
+                    <ScrollReveal delay={0.2} yOffset={20}>
+                        <li className="approach-item">
+                            <span className="approach-number">02</span>
+                            <h3 className="approach-title">Interior</h3>
+                            <p className="approach-desc">Curating rare materials, textures, and bespoke detailing to shape internal spaces that evoke emotion and elevate the human experience.</p>
+                        </li>
+                    </ScrollReveal>
+                    <ScrollReveal delay={0.3} yOffset={20}>
+                        <li className="approach-item">
+                            <span className="approach-number">03</span>
+                            <h3 className="approach-title">Construction</h3>
+                            <p className="approach-desc">Executing designs with precision and master craftspeople, ensuring flawless translation from architectural vision to tangible reality.</p>
+                        </li>
+                    </ScrollReveal>
+                </ul>
             </section>
 
-            <section className="content-section" id="contact">
-                <h2>Get in Touch</h2>
-                <p>
-                    Let us bring your vision to life. Reach out to discuss your next
-                    project.
-                </p>
-            </section>
+            {/* FOOTER */}
+            <Footer />
         </>
     );
 }
