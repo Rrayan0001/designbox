@@ -7,11 +7,21 @@ export default function IntroAnimation({ onComplete }) {
     const [phase, setPhase] = useState("init");
 
     useEffect(() => {
+        // Check if animation has already played in this session
+        const hasPlayed = sessionStorage.getItem("designbox_intro_played");
+
+        if (hasPlayed) {
+            setPhase("complete");
+            onComplete?.();
+            return;
+        }
+
         const t1 = setTimeout(() => setPhase("grid"), 200);
         const t2 = setTimeout(() => setPhase("reveal"), 1000);
         const t3 = setTimeout(() => setPhase("transition"), 2800);
         const t4 = setTimeout(() => {
             setPhase("complete");
+            sessionStorage.setItem("designbox_intro_played", "true");
             onComplete?.();
         }, 4300);
 
@@ -95,8 +105,8 @@ export default function IntroAnimation({ onComplete }) {
                             top: "50%",
                             left: "50%",
                             transform: `translate(-50%, -50%) scaleX(${phase === "init" || phase === "grid"
-                                    ? 1.08
-                                    : 1
+                                ? 1.08
+                                : 1
                                 })`,
                             fontSize: "clamp(2rem, 6vw, 5rem)",
                             letterSpacing: "0.12em",

@@ -9,30 +9,10 @@ import ProjectCard from "./components/ProjectCard";
 import ScrollReveal from "./components/ScrollReveal";
 import ParallaxImage from "./components/ParallaxImage";
 import Footer from "./components/Footer";
+import Link from "next/link";
+import { PROJECTS_DATA } from "./data/projects";
 
-const PROJECTS = [
-    {
-        id: 1,
-        title: "Ayyana Mane",
-        category: "Residential Architecture",
-        year: "2024",
-        image: "/projects/AYYANA_MANE_pg2_img1.jpeg"
-    },
-    {
-        id: 2,
-        title: "Hariprasad Residence",
-        category: "Interiors",
-        year: "2024",
-        image: "/projects/Hariprasad_-_Interiors_pg3_img2.jpeg"
-    },
-    {
-        id: 3,
-        title: "Spurthi & Jayanth House",
-        category: "Architecture & Interiors",
-        year: "2025",
-        image: "/projects/Spurthi_&_Jayanth_House(1st_Proposal)_pg3_img1.jpeg"
-    }
-];
+
 
 export default function Home() {
     const [animationDone, setAnimationDone] = useState(false);
@@ -59,7 +39,7 @@ export default function Home() {
             {/* SELECTED PROJECTS */}
             <section className="content-section content-section--platinum" id="projects">
                 <ScrollReveal>
-                    <h2>Selected Projects</h2>
+                    <h2>Projects</h2>
                     <p>
                         Each space we design is a dialogue between form and function — where
                         every material, angle, and light source is considered with
@@ -68,14 +48,16 @@ export default function Home() {
                 </ScrollReveal>
 
                 <div className="projects-grid">
-                    {PROJECTS.map((project, idx) => (
+                    {PROJECTS_DATA.map((project, idx) => (
                         <ScrollReveal key={project.id} delay={idx * 0.1}>
-                            <ProjectCard
-                                title={project.title}
-                                category={project.category}
-                                year={project.year}
-                                imageSrc={project.image}
-                            />
+                            <Link href={`/projects/${project.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <ProjectCard
+                                    title={project.title}
+                                    category={project.category}
+                                    year={project.year}
+                                    imageSrc={project.coverImage}
+                                />
+                            </Link>
                         </ScrollReveal>
                     ))}
                 </div>
