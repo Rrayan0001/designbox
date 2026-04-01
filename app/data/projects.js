@@ -1,10 +1,34 @@
 export const PROJECTS_DATA = [
     {
+        id: "kanakbhavan",
+        title: "Kanakbhavan",
+        category: "Architecture & Interiors",
+        year: "2026",
+        coverImage: "/projects/kanakbhavan/page_1.jpeg",
+        galleryDir: "/projects/kanakbhavan",
+        pageCount: 2,
+        description: "A new project located at Kanakagiri - Koppal."
+    },
+    {
+        id: "university-at-bellary",
+        title: "University at Bellary",
+        category: "Architecture & Interiors",
+        year: "2026",
+        coverImage: "/projects/university-at-bellary/page_1.jpeg",
+        objectPosition: "center",
+        objectFit: "contain",
+        galleryDir: "/projects/university-at-bellary",
+        galleryAspectRatio: "auto",
+        galleryObjectFit: "contain",
+        pageCount: 1,
+        description: "An architectural vision for the University at Bellary."
+    },
+    {
         id: "sunita-karatagi",
         title: "Sunita Karatagi",
         category: "Architecture & Interiors",
         year: "2024",
-        coverImage: "/projects/sunita-karatagi/page_3.jpeg",
+        coverImage: "/projects/sunita-karatagi/page_32.jpeg",
         galleryDir: "/projects/sunita-karatagi",
         pageCount: 35,
         description: "An elegant exploration of architectural form and sophisticated interior design for Sunita Karatagi."
@@ -34,7 +58,7 @@ export const PROJECTS_DATA = [
         title: "Hariprasad Residence",
         category: "Interiors",
         year: "2024",
-        coverImage: "/projects/Hariprasad_-_Interiors_pg3_img2.jpeg",
+        coverImage: "/projects/hariprasad/page_9.jpeg",
         galleryDir: "/projects/hariprasad",
         pageCount: 29,
         description: "A deep dive into high-end interior detailing, focusing on rich materials, lighting textures, and masterful craftsmanship."

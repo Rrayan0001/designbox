@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
-export default function ProjectCard({ title, category, imageSrc, year }) {
+export default function ProjectCard({ title, category, imageSrc, year, objectPosition = "center", objectFit = "cover" }) {
     return (
         <motion.div
             className="project-card"
@@ -14,6 +14,7 @@ export default function ProjectCard({ title, category, imageSrc, year }) {
                 <motion.img
                     src={imageSrc}
                     alt={title}
+                    style={{ objectPosition, objectFit }}
                     variants={{
                         initial: { scale: 1 },
                         hover: { scale: 1.05 }

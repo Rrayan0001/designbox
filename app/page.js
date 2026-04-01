@@ -56,6 +56,8 @@ export default function Home() {
                                     category={project.category}
                                     year={project.year}
                                     imageSrc={project.coverImage}
+                                    objectPosition={project.objectPosition}
+                                    objectFit={project.objectFit}
                                 />
                             </Link>
                         </ScrollReveal>

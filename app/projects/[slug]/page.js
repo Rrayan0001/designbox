@@ -6,8 +6,9 @@ import ScrollReveal from "../../components/ScrollReveal";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
-export default function ProjectDetail({ params }) {
-    const project = PROJECTS_DATA.find(p => p.id === params.slug);
+export default async function ProjectDetail({ params }) {
+    const { slug } = await params;
+    const project = PROJECTS_DATA.find(p => p.id === slug);
 
     if (!project) {
         return notFound();
@@ -37,12 +38,16 @@ export default function ProjectDetail({ params }) {
             <section className="project-gallery">
                 {images.map((src, idx) => (
                     <ScrollReveal key={idx} delay={0.1}>
-                        <div className="project-slide-wrapper">
+                        <div 
+                            className="project-slide-wrapper"
+                            style={{ aspectRatio: project.galleryAspectRatio || "16/9" }}
+                        >
                             <img
                                 src={src}
                                 alt={`${project.title} slide ${idx + 1}`}
                                 className="project-slide-image"
                                 loading={idx < 2 ? "eager" : "lazy"}
+                                style={{ objectFit: project.galleryObjectFit || "cover" }}
                             />
                         </div>
                     </ScrollReveal>
